@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://db_pg:5432/web-db
+    username: web
+    password: 12345
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  sql:
+    init:
+      mode: always

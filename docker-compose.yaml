@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  db_pg:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: web-db
+      POSTGRES_USER: web
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: ./backend/MagazinExampleProject
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db_pg
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db_pg:5432/web-db
+      SPRING_DATASOURCE_USERNAME: web
+      SPRING_DATASOURCE_PASSWORD: 12345
+
+volumes:
+  postgres_data:
