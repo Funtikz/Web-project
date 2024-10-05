@@ -1,8 +1,26 @@
+#Для работы с Docker
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://db_pg:5432/web-db
+#    username: web
+#    password: 12345
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+#  sql:
+#    init:
+#      mode: always
+
+#Для работы внутри IDE
 spring:
   datasource:
-    url: jdbc:postgresql://db_pg:5432/web-db
-    username: web
-    password: 12345
+    url: jdbc:postgresql://localhost:5432/Magazin
+    username: postgres
+    password: 3200558819
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -10,6 +28,3 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  sql:
-    init:
-      mode: always
