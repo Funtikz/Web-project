@@ -7,14 +7,16 @@ import org.example.magazinexampleproject.models.ClothingProduct;
 import org.example.magazinexampleproject.models.Product;
 import org.example.magazinexampleproject.repositories.AccessoryProductRepository;
 import org.example.magazinexampleproject.repositories.ClothingProductRepository;
+import org.example.magazinexampleproject.repositories.ProductRepository;
+import org.example.magazinexampleproject.repositories.ProductSpecification;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -22,6 +24,7 @@ import java.util.stream.Stream;
 public class ProductService {
     AccessoryProductRepository accessoryProductRepository;
     ClothingProductRepository clothingProductRepository;
+    ProductRepository productRepository;
 
     public AccessoryProduct createAccessoryProduct(AccessoryProduct product) {
         return accessoryProductRepository.save(product);
@@ -87,18 +90,47 @@ public class ProductService {
             throw new ProductNotFoundException(id);
         }
     }
-    public Page<Product> searchProductsByName(String name, int page, int size) {
+    public Page<Product> searchProducts(Optional<String> name,
+                                        Optional<Double> minPrice,
+                                        Optional<Double> maxPrice,
+                                        Optional<String> accessoryCategory,
+                                        Optional<String> clothingSize,
+                                        Optional<String> clothingCategory,
+                                        int page,
+                                        int size) {
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<AccessoryProduct> accessoryPage = accessoryProductRepository.findByNameContainingIgnoreCase(name, pageable);
-        Page<ClothingProduct> clothingPage = clothingProductRepository.findByNameContainingIgnoreCase(name, pageable);
+        Specification<Product> spec = Specification.where(null);
 
-        List<Product> combinedProducts = new ArrayList<>();
-        combinedProducts.addAll(accessoryPage.getContent());
-        combinedProducts.addAll(clothingPage.getContent());
+        if (name.isPresent()) {
+            spec = spec.and(ProductSpecification.hasName(name.get()));
+        }
 
-        long totalElements = accessoryPage.getTotalElements() + clothingPage.getTotalElements();
-        return new PageImpl<>(combinedProducts, pageable, totalElements);
+        if (minPrice.isPresent() && maxPrice.isPresent()) {
+            spec = spec.and(ProductSpecification.hasPriceBetween(minPrice.get(), maxPrice.get()));
+        } else {
+            if (minPrice.isPresent()) {
+                spec = spec.and(ProductSpecification.hasMinPrice(minPrice.get()));
+            }
+            if (maxPrice.isPresent()) {
+                spec = spec.and(ProductSpecification.hasMaxPrice(maxPrice.get()));
+            }
+        }
+
+        if (accessoryCategory.isPresent()) {
+            spec = spec.and(ProductSpecification.hasAccessoryCategory(accessoryCategory.get()));
+        }
+
+        if (clothingCategory.isPresent()){
+            spec = spec.and(ProductSpecification.hasClothingCategory(clothingCategory.get()));
+        }
+
+        if (clothingSize.isPresent()){
+            spec = spec.and(ProductSpecification.hasClothingSize(clothingSize.get()));
+        }
+
+
+        return productRepository.findAll(spec, pageable);
     }
 
 }
