@@ -47,10 +47,6 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<Product> createProduct(@Valid @RequestBody Product product){
-        return new ResponseEntity<>(productService.createProduct(product), HttpStatus.CREATED);
-    }
 
     @PostMapping("/accessory")
     public AccessoryProduct createAccessoryProduct(@Valid @RequestBody AccessoryProduct product) {
