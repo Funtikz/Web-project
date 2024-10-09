@@ -1,14 +1,14 @@
 package org.example.magazinexampleproject.service;
 
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.example.magazinexampleproject.dto.ProductDTO;
 import org.example.magazinexampleproject.exceptions.ProductNotFoundException;
-import org.example.magazinexampleproject.models.AccessoryProduct;
-import org.example.magazinexampleproject.models.ClothingProduct;
-import org.example.magazinexampleproject.models.Product;
-import org.example.magazinexampleproject.repositories.AccessoryProductRepository;
-import org.example.magazinexampleproject.repositories.ClothingProductRepository;
-import org.example.magazinexampleproject.repositories.ProductRepository;
-import org.example.magazinexampleproject.repositories.ProductSpecification;
+import org.example.magazinexampleproject.models.products.AccessoryProduct;
+import org.example.magazinexampleproject.models.products.ClothingProduct;
+import org.example.magazinexampleproject.models.products.Product;
+import org.example.magazinexampleproject.repositories.product.ProductRepository;
+import org.example.magazinexampleproject.repositories.product.ProductSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,79 +17,98 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @AllArgsConstructor
 public class ProductService {
-    AccessoryProductRepository accessoryProductRepository;
-    ClothingProductRepository clothingProductRepository;
     ProductRepository productRepository;
 
-    public AccessoryProduct createAccessoryProduct(AccessoryProduct product) {
-        return accessoryProductRepository.save(product);
-    }
-
-    public ClothingProduct createClothingProduct(ClothingProduct product) {
-        return clothingProductRepository.save(product);
+    public Product getProductById(Long id) {
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
     public List<Product> getAllProducts() {
-        return Stream.concat(
-                accessoryProductRepository.findAll().stream(),
-                clothingProductRepository.findAll().stream()
-        ).toList();
+        return productRepository.findAll();
     }
 
+    @Transactional
+    public Product createProduct(ProductDTO productDTO) {
+        Product product;
 
-    public Product getProductById(Long id) {
-        return accessoryProductRepository.findById(id)
-                .map(product -> (Product) product)
-                .or(() -> clothingProductRepository.findById(id).map(product -> (Product) product))
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        switch (productDTO.getProductType()) {
+            case CLOTHING:
+                ClothingProduct clothingProduct = new ClothingProduct();
+                clothingProduct.setClothingSize(productDTO.getClothingSize());
+                clothingProduct.setClothingCategory(productDTO.getClothingCategory());
+                product = clothingProduct;
+                break;
+
+            case ACCESSORY:
+                AccessoryProduct accessoryProduct = new AccessoryProduct();
+                accessoryProduct.setAccessoryCategory(productDTO.getAccessoryCategory());
+                product = accessoryProduct;
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid product type: " + productDTO.getProductType());
+        }
+        setCommonFields(product, productDTO);
+        return productRepository.save(product);
     }
 
-    public AccessoryProduct updateAccessoryProduct(Long id, AccessoryProduct updatedProduct) {
-        return accessoryProductRepository.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setName(updatedProduct.getName());
-                    existingProduct.setDescription(updatedProduct.getDescription());
-                    existingProduct.setPrice(updatedProduct.getPrice());
-                    existingProduct.setQuantity(updatedProduct.getQuantity());
-                    existingProduct.setImageUrl(updatedProduct.getImageUrl());
-                    existingProduct.setDiscountPercentage(updatedProduct.getDiscountPercentage());
-                    existingProduct.setAccessoryCategory(updatedProduct.getAccessoryCategory());
-                    return accessoryProductRepository.save(existingProduct);
-                })
-                .orElseThrow(() -> new ProductNotFoundException(id));
+    private void setCommonFields(Product product, ProductDTO productDTO){
+        product.setName(productDTO.getName());
+        product.setDescription(productDTO.getDescription());
+        product.setOriginalPrice(productDTO.getOriginalPrice());
+        product.setDiscountedPrice(calculateDiscountPrice(productDTO));
+        product.setDiscountPercentage(productDTO.getDiscountPercentage());
+        product.setQuantity(productDTO.getQuantity());
+        product.setImageUrl(productDTO.getImageUrl());
+        product.setProductType(productDTO.getProductType());
     }
 
+    public double calculateDiscountPrice(ProductDTO product){
+        return product.getOriginalPrice()
+                - (product.getOriginalPrice() * product.getDiscountPercentage() / 100);
 
-    public ClothingProduct updateClothingProduct(Long id, ClothingProduct updatedProduct) {
-        return clothingProductRepository.findById(id)
-                .map(existingProduct -> {
-                    existingProduct.setName(updatedProduct.getName());
-                    existingProduct.setDescription(updatedProduct.getDescription());
-                    existingProduct.setPrice(updatedProduct.getPrice());
-                    existingProduct.setQuantity(updatedProduct.getQuantity());
-                    existingProduct.setImageUrl(updatedProduct.getImageUrl());
-                    existingProduct.setDiscountPercentage(updatedProduct.getDiscountPercentage());
-                    existingProduct.setClothingCategory(updatedProduct.getClothingCategory());
-                    existingProduct.setClothingSize(updatedProduct.getClothingSize());
-                    return clothingProductRepository.save(existingProduct);
-                })
-                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    @Transactional
+    public Product updateProduct(ProductDTO productDTO) {
+        Product existingProduct = getProductById(productDTO.getId());
+
+        switch (productDTO.getProductType()) {
+            case CLOTHING:
+                if (existingProduct instanceof ClothingProduct) {
+                    ClothingProduct clothingProduct = (ClothingProduct) existingProduct;
+                    clothingProduct.setClothingCategory(productDTO.getClothingCategory());
+                    clothingProduct.setClothingSize(productDTO.getClothingSize());
+                } else {
+                    throw new IllegalArgumentException("Product type mismatch. Expected ClothingProduct.");
+                }
+                break;
+
+            case ACCESSORY:
+                if (existingProduct instanceof AccessoryProduct) {
+                    AccessoryProduct accessoryProduct = (AccessoryProduct) existingProduct;
+                    accessoryProduct.setAccessoryCategory(productDTO.getAccessoryCategory());
+                } else {
+                    throw new IllegalArgumentException("Product type mismatch. Expected AccessoryProduct.");
+                }
+                break;
+
+            default:
+                throw new IllegalArgumentException("Invalid product type: " + productDTO.getProductType());
+        }
+        setCommonFields(existingProduct, productDTO);
+        return productRepository.save(existingProduct);
+    }
 
     public void deleteProduct(Long id) {
-        if (accessoryProductRepository.existsById(id)) {
-            accessoryProductRepository.deleteById(id);
-        } else if (clothingProductRepository.existsById(id)) {
-            clothingProductRepository.deleteById(id);
-        } else {
-            throw new ProductNotFoundException(id);
-        }
+        Product productById = getProductById(id);
+        productRepository.delete(productById);
     }
+
     public Page<Product> searchProducts(Optional<String> name,
                                         Optional<Double> minPrice,
                                         Optional<Double> maxPrice,
@@ -132,5 +151,4 @@ public class ProductService {
 
         return productRepository.findAll(spec, pageable);
     }
-
 }

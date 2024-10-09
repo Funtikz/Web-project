@@ -1,69 +1,16 @@
+INSERT INTO product (product_type, name, description, original_price, discounted_price, discount_percentage, quantity, image_url) VALUES
+  ('ACCESSORY', 'Soccer Ball', 'High quality soccer ball', 50.00, 45.00, 10, 100, 'url_to_image_ball'),
+  ('ACCESSORY', 'Warm Gloves', 'Perfect for cold weather', 20.00, 15.00, 25, 200, 'url_to_image_gloves'),
+  ('ACCESSORY', 'Stylish Scarf', 'Elegant scarf for all seasons', 30.00, 27.00, 10, 150, 'url_to_image_scarf'),
+  ('CLOTHING', 'Football Jersey', 'Team jersey', 70.00, 65.00, 7, 50, 'url_to_image_jersey'),
+  ('CLOTHING', 'Running Shorts', 'Lightweight running shorts', 40.00, 35.00, 12, 75, 'url_to_image_shorts');
 
-
--- Вставка данных в таблицу Product
-INSERT INTO Product (name, description, price, quantity, image_url, discount_percentage) VALUES
-                                                                                             ('Футбольный мяч', 'Официальный мяч клуба, отличный для тренировок и игр.', 30.00, 100, 'url_to_image_ball', 10),
-                                                                                             ('Футбольные перчатки', 'Перчатки для вратаря с хорошим захватом.', 25.00, 80, 'url_to_image_gloves', 15),
-                                                                                             ('Шарф клуба', 'Стильный шарф с логотипом клуба.', 20.00, 150, 'url_to_image_scarf', 5),
-                                                                                             ('Футболка клуба', 'Классическая футболка с символикой клуба.', 15.99, 200, 'url_to_image_tshirt', 20),
-                                                                                             ('Спортивные шорты', 'Удобные шорты для тренировок.', 18.00, 120, 'url_to_image_shorts', 10),
-                                                                                             ('Спортивные брюки', 'Брюки для тренировок в холодную погоду.', 35.00, 90, 'url_to_image_pants', 15),
-                                                                                             ('Кроссовки', 'Комфортные кроссовки для игры в футбол.', 60.00, 75, 'url_to_image_boots', 5),
-                                                                                             ('Детская футболка', 'Футболка для маленьких болельщиков.', 12.00, 100, 'url_to_image_kids_tshirt', 10),
-                                                                                             ('Кепка клуба', 'Модная кепка с логотипом.', 18.00, 50, 'url_to_image_cap', 0),
-                                                                                             ('Толстовка клуба', 'Уютная толстовка с символикой клуба.', 45.00, 60, 'url_to_image_hoodie', 20),
-                                                                                             ('Мяч для тренировки', 'Идеален для тренировок.', 25.00, 100, 'url_to_image_training_ball', 15),
-                                                                                             ('Рюкзак с логотипом', 'Удобный рюкзак для хранения вещей.', 40.00, 80, 'url_to_image_backpack', 0),
-                                                                                             ('Спортивная бутылка', 'Бутылка для воды с логотипом клуба.', 10.00, 150, 'url_to_image_bottle', 5),
-                                                                                             ('Термос', 'Термос для горячих и холодных напитков.', 15.00, 70, 'url_to_image_thermos', 10),
-                                                                                             ('Коврик для тренировок', 'Коврик для фитнеса и тренировок.', 30.00, 40, 'url_to_image_mat', 0),
-                                                                                             ('Книга о футболе', 'Интересная книга о тактиках футбола.', 20.00, 200, 'url_to_image_book', 5),
-                                                                                             ('Игровая форма', 'Форма для игр с логотипом клуба.', 55.00, 30, 'url_to_image_jersey', 15),
-                                                                                             ('Вратарская форма', 'Специальная форма для вратаря.', 60.00, 20, 'url_to_image_goalie_jersey', 0),
-                                                                                             ('Футбольные носки', 'Удобные носки для игры.', 8.00, 150, 'url_to_image_socks', 5),
-                                                                                             ('Шлем', 'Шлем для защиты головы.', 25.00, 100, 'url_to_image_helmet', 10),
-                                                                                             ('Спортивная куртка', 'Куртка для тренировок на улице.', 50.00, 50, 'url_to_image_jacket', 20),
-                                                                                             ('Спортивные шорты для девушек', 'Стильные шорты для женщин.', 18.00, 90, 'url_to_image_womens_shorts', 5),
-                                                                                             ('Кроссовки для женщин', 'Комфортные кроссовки для женщин.', 65.00, 60, 'url_to_image_womens_boots', 0),
-                                                                                             ('Спортивные лосины', 'Легкие и удобные лосины.', 20.00, 80, 'url_to_image_leggings', 10),
-                                                                                             ('Майка клуба', 'Удобная майка с логотипом.', 15.00, 200, 'url_to_image_tank_top', 15),
-                                                                                             ('Футбольная форма для детей', 'Форма для юных футболистов.', 25.00, 100, 'url_to_image_kids_jersey', 0),
-                                                                                             ('Шарф для женщин', 'Стильный женский шарф.', 22.00, 100, 'url_to_image_womens_scarf', 5),
-                                                                                             ('Плечевой щиток', 'Щиток для защиты плеча.', 30.00, 100, 'url_to_image_shoulder_pad', 10),
-                                                                                             ('Перчатки для фитнеса', 'Перчатки для тренировок в спортзале.', 12.50, 150, 'url_to_image_fitness_gloves', 5);
-
--- Вставка данных в таблицу AccessoryProduct
 INSERT INTO accessory (id, accessory_category) VALUES
-                                                   (1, 'BALL'),
-                                                   (2, 'GLOVES'),
-                                                   (3, 'SCARF'),
-                                                   (4, 'BALL'),
-                                                   (5, 'BALL'),
-                                                   (6, 'GLOVES'),
-                                                   (7, 'SCARF'),
-                                                   (8, 'BALL'),
-                                                   (9, 'GLOVES'),
-                                                   (10, 'SCARF'),
-                                                   (11, 'BALL'),
-                                                   (12, 'GLOVES'),
-                                                   (13, 'SCARF'),
-                                                   (14, 'BALL'),
-                                                   (15, 'GLOVES');
+   (1, 'BALL'),
+   (2, 'GLOVES'),
+   (3, 'SCARF');
 
--- Вставка данных в таблицу ClothingProduct
+
 INSERT INTO clothing (id, clothing_size, clothing_category) VALUES
-                                                                (1, 'M', 'T_SHIRT'),
-                                                                (2, 'L', 'JERSEY'),
-                                                                (3, 'S', 'SHORTS'),
-                                                                (4, 'XL', 'PANTS'),
-                                                                (5, 'M', 'BOOTS'),
-                                                                (6, 'L', 'T_SHIRT'),
-                                                                (7, 'S', 'JERSEY'),
-                                                                (8, 'XL', 'SHORTS'),
-                                                                (9, 'XXL', 'PANTS'),
-                                                                (10, 'M', 'BOOTS'),
-                                                                (11, 'S', 'T_SHIRT'),
-                                                                (12, 'L', 'JERSEY'),
-                                                                (13, 'M', 'SHORTS'),
-                                                                (14, 'L', 'PANTS'),
-                                                                (15, 'XL', 'BOOTS');
+    (4, 'L', 'JERSEY'),
+    (5, 'M', 'SHORTS');

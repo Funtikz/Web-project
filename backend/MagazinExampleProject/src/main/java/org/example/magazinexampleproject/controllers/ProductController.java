@@ -2,9 +2,8 @@ package org.example.magazinexampleproject.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.example.magazinexampleproject.models.AccessoryProduct;
-import org.example.magazinexampleproject.models.ClothingProduct;
-import org.example.magazinexampleproject.models.Product;
+import org.example.magazinexampleproject.dto.ProductDTO;
+import org.example.magazinexampleproject.models.products.Product;
 import org.example.magazinexampleproject.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -48,28 +47,15 @@ public class ProductController {
     }
 
 
-    @PostMapping("/accessory")
-    public AccessoryProduct createAccessoryProduct(@Valid @RequestBody AccessoryProduct product) {
-        return productService.createAccessoryProduct(product);
+    @PostMapping("/create")
+    public ResponseEntity<Product> createProduct(@Valid @RequestBody ProductDTO product) {
+        Product createdProduct = productService.createProduct(product);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdProduct);
     }
 
-    @PostMapping("/clothing")
-    public ClothingProduct createClothingProduct(@Valid @RequestBody ClothingProduct product) {
-        return productService.createClothingProduct(product);
-    }
-
-    @PutMapping("/accessory/{id}")
-    public ResponseEntity<AccessoryProduct> updateAccessoryProduct(@PathVariable Long id,
-                                                                   @Valid @RequestBody AccessoryProduct updatedProduct) {
-        AccessoryProduct product = productService.updateAccessoryProduct(id, updatedProduct);
-        return ResponseEntity.ok(product);
-    }
-
-    @PutMapping("/clothing/{id}")
-    public ResponseEntity<ClothingProduct> updateClothingProduct(@PathVariable Long id,
-                                                                 @Valid @RequestBody ClothingProduct updatedProduct) {
-        ClothingProduct product = productService.updateClothingProduct(id, updatedProduct);
-        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
+    @PutMapping("/update")
+    public ResponseEntity<Product> updateProduct(@Valid @RequestBody ProductDTO productDTO){
+        return new ResponseEntity<>(productService.updateProduct(productDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -77,8 +63,5 @@ public class ProductController {
         productService.deleteProduct(id);
         return new ResponseEntity<>("Product with id " + id + " was deleted successfully", HttpStatus.NO_CONTENT);
     }
-
-
-
 
 }

@@ -1,6 +1,6 @@
-package org.example.magazinexampleproject.repositories;
+package org.example.magazinexampleproject.repositories.product;
 
-import org.example.magazinexampleproject.models.Product;
+import org.example.magazinexampleproject.models.products.Product;
 import org.springframework.data.jpa.domain.Specification;
 
 public class ProductSpecification {

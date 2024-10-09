@@ -1,4 +1,4 @@
-package org.example.magazinexampleproject.models;
+package org.example.magazinexampleproject.models.products;
 
 public enum AccessoryCategory {
     BALL,
