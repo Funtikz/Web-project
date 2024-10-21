@@ -1,6 +1,6 @@
 package org.example.magazinexampleproject;
 
-import org.example.magazinexampleproject.models.products.ProductType;
+import org.example.magazinexampleproject.dto.product.ProductDTO;
 import org.example.magazinexampleproject.models.products.*;
 import org.example.magazinexampleproject.repositories.product.ProductRepository;
 import org.example.magazinexampleproject.service.ProductService;
@@ -9,10 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.*;
-import org.example.magazinexampleproject.dto.ProductDTO;
 
 class ProductServiceTest {
 

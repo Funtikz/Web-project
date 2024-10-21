@@ -2,7 +2,7 @@ package org.example.magazinexampleproject.service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import org.example.magazinexampleproject.dto.ProductDTO;
+import org.example.magazinexampleproject.dto.product.ProductDTO;
 import org.example.magazinexampleproject.exceptions.ProductNotFoundException;
 import org.example.magazinexampleproject.models.products.AccessoryProduct;
 import org.example.magazinexampleproject.models.products.ClothingProduct;
@@ -103,7 +103,7 @@ public class ProductService {
         setCommonFields(existingProduct, productDTO);
         return productRepository.save(existingProduct);
     }
-
+    @Transactional
     public void deleteProduct(Long id) {
         Product productById = getProductById(id);
         productRepository.delete(productById);

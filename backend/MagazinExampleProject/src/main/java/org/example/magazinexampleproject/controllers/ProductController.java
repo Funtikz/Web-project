@@ -2,7 +2,7 @@ package org.example.magazinexampleproject.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.example.magazinexampleproject.dto.ProductDTO;
+import org.example.magazinexampleproject.dto.product.ProductDTO;
 import org.example.magazinexampleproject.models.products.Product;
 import org.example.magazinexampleproject.service.ProductService;
 import org.springframework.data.domain.Page;

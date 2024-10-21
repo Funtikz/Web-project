@@ -1,4 +1,4 @@
-package org.example.magazinexampleproject.dto;
+package org.example.magazinexampleproject.dto.product;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.EnumType;
@@ -61,6 +61,5 @@ public class ProductDTO {
     private ClothingCategory clothingCategory;
     @Schema(description = "Required if you have productType = ACCESSORY")
     private AccessoryCategory accessoryCategory;
-
 }
 

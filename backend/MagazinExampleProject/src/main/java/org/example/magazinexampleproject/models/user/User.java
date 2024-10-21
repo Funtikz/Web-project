@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.example.magazinexampleproject.models.carts.Cart;
 
+import java.util.Set;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,6 +20,9 @@ public class User {
 
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Cart cart;
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Cart cart; // Имя соответствует полю в UserDto
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles; // Роли пользователя
 }

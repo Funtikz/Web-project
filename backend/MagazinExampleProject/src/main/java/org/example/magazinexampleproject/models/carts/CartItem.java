@@ -1,5 +1,6 @@
 package org.example.magazinexampleproject.models.carts;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,10 +14,11 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonBackReference // Это предотвратит рекурсию
     private Cart cart;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private Product product;
 
     private int quantity;
